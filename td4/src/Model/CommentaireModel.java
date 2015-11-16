@@ -69,6 +69,6 @@ public class CommentaireModel extends Model
 	{
 		entity.id = getNextId();
 
-		orm.execute("INSERT INTO commentaire (IDCOMMENT, PSEUDO, IDSORT, TEXT, DTE) VALUES ('"+Integer.toString(entity.id)+"', '"+entity.pseudo+"', '"+Integer.toString(entity.idsort)+"', '"+entity.text+"', TO_DATE('"+entity.date+"', 'YYYY-MM-DD HH:MI:SS'))");
+		orm.execute("INSERT INTO commentaire (IDCOMMENT, PSEUDO, IDSORT, TEXT, DTE) VALUES ('"+Integer.toString(entity.id)+"', '"+entity.pseudo+"', '"+Integer.toString(entity.idsort)+"', '"+entity.text+"', TO_DATE('"+entity.date+"', 'YYYY-MM-DD HH24:MI:SS'))");
 	}
 }

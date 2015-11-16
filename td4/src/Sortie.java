@@ -52,6 +52,19 @@ public class Sortie extends HttpServlet
 
 		} else if(option.equals("new")) {
 
+			tp4.Entity.Sortie sortie = new tp4.Entity.Sortie(orm);
+
+			request.setAttribute("sortie", sortie);
+			request.getRequestDispatcher("/new.jsp").forward(request, response);
+
+		} else if(option.equals("edit")) {
+
+			String id = request.getParameter("id");
+			
+			tp4.Model.SortieModel sortiesRepo = (tp4.Model.SortieModel)orm.getModel("Sortie");
+			tp4.Entity.Sortie sortie = sortiesRepo.find(id);
+
+			request.setAttribute("sortie", sortie);
 			request.getRequestDispatcher("/new.jsp").forward(request, response);
 
 		} else if(option.equals("details")) {

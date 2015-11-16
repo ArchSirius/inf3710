@@ -21,7 +21,7 @@
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li><a href="#">Menu principal</a></li>
+              <li><a href="sortie?option=menu">Menu principal</a></li>
               <li><a href="sortie?option=new">Nouvelle sortie</a></li>
               <li><a href="sortie?option=list">Sorties a venir</a></li>
               <li><a href="account">Changer de pseudo</a></li>

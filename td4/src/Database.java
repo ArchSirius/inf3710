@@ -68,13 +68,24 @@ public class Database {
 		return rs;
 	}
 
+	// https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html
 	public int executeSql (Statement stmt, String sql) {
 		int resp = 0;
 		try {
+			connection.setAutoCommit(false);
 			resp = stmt.executeUpdate(sql);
+			connection.commit();
 		}
 		catch(SQLException se) {
 			se.printStackTrace();
+
+			if (connection != null) {
+	            try {
+	                connection.rollback();
+	            } catch(SQLException excep) {
+	                excep.printStackTrace();
+	            }
+	        }
 		}
 		return resp;
 	}

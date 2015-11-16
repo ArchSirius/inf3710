@@ -5,7 +5,7 @@
     <p>
       <a class="btn btn-lg btn-primary" href="sortie?option=new" role="button">Créer une nouvelle sortie</a>
       <a class="btn btn-lg btn-primary" href="sortie?option=list" role="button">Liste des sorties à venir</a>
-      <a class="btn btn-lg btn-primary" href="user?option=edit" role="button">Changer le pseudo de l'utilisateur courant</a>
+      <a class="btn btn-lg btn-primary" href="account" role="button">Changer le pseudo de l'utilisateur courant</a>
     </p>
   </div>
 <%@ include file="footer.jsp" %>

@@ -50,14 +50,14 @@ public class Sortie extends HttpServlet
 			request.setAttribute("sorties", sorties);
 			request.getRequestDispatcher("/list.jsp").forward(request, response);
 
-		} else if(option.equals("new")) {
+		} else if (option.equals("new")) {
 
 			tp4.Entity.Sortie sortie = new tp4.Entity.Sortie(orm);
 
 			request.setAttribute("sortie", sortie);
 			request.getRequestDispatcher("/new.jsp").forward(request, response);
 
-		} else if(option.equals("edit")) {
+		} else if (option.equals("edit")) {
 
 			String id = request.getParameter("id");
 			
@@ -67,7 +67,7 @@ public class Sortie extends HttpServlet
 			request.setAttribute("sortie", sortie);
 			request.getRequestDispatcher("/new.jsp").forward(request, response);
 
-		} else if(option.equals("details")) {
+		} else if (option.equals("details")) {
 
 			String id = request.getParameter("id");
 
@@ -76,6 +76,9 @@ public class Sortie extends HttpServlet
 
 			request.setAttribute("sortie", sortie);
 			request.getRequestDispatcher("/details.jsp").forward(request, response);
+		}
+		else {
+			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 	}
 
@@ -136,41 +139,4 @@ public class Sortie extends HttpServlet
 	{
 		return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
 	}
-
-	//protected String insert(HttpServletRequest request) {
-	//	String id = request.getParameter("id");
-	//	String nom = request.getParameter("nom");
-	//	String pays = request.getParameter("pays");
-	//	String sql = "INSERT INTO Equipe VALUES ('"+id+"', '"+nom+"', '"+pays+"')";
-	//	database.connect();
-	//	Statement stmt = database.getStatement();
-	//	int resp = database.executeSql(stmt, sql);
-	//	database.closeStatement(stmt);
-	//	database.closeConnection();
-	//	String message = "Modifiées: "+resp;
-	//	return message;
-	//}
-
-	//protected List<String[]> selectPays() {
-	//	String sql = "SELECT idPays, nom FROM Pays ORDER BY nom";
-	//	database.connect();
-	//	Statement stmt = database.getStatement();
-	//	ResultSet rs = database.executeSelect(stmt, sql);
-	//	List<String[]> pays = new ArrayList<String[]>();
-	//	try {
-	//		while(rs.next()) {
-	//			String idPays = rs.getString("idPays");
-	//			String nom = rs.getString("nom");
-	//			pays.add(new String[] { idPays, nom });
-	//		}
-	//		database.closeStatement(stmt);
-	//		database.closeConnection();
-	//	}
-	//	catch(SQLException se) {
-	//		   se.printStackTrace();
-	//	}
-	//	return pays;
-	//}
-
-
 }

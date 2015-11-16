@@ -27,19 +27,21 @@
         <h3 class="panel-title">S'inscrire</h3>
       </div>
       <div class="panel-body">
-        <form action="#">
+        <form action="sortie?option=inscription" method="POST">
           <div class="form-group">
             <label>Nombre d'invit&eacute;s</label>
-            <input type="number" class="form-control" max="7" min="0" />
+            <input type="number" class="form-control" name="nbInvite" value="0" max="7" min="0" />
           </div>
-          <input type="hidden" name="sortieId" />
+          <input type="hidden" name="idsort" value="<%= Integer.toString(sortie.id)%>" />
           <button type="submit" class="btn btn-primary">Continuer &raquo;</button>
         </form>
         <hr />
-        <h3><%= sortie.getParticipants().size()%> Personnes inscrites</h3>
+        <h3><%= sortie.getInscriptions().size()%> Personnes inscrites</h3>
         <ul>
-        <% for (tp4.Entity.Membre participant : sortie.getParticipants()) {%>
-          <li><%= participant.prenom%> <%= participant.nom%></li>
+        <% for (tp4.Entity.Inscription inscription : sortie.getInscriptions()) {%>
+          <li><%= inscription.getMembre().prenom%> <%= inscription.getMembre().nom%> <% if (inscription.nbInvite > 0) {%>
+          <%= "("+Integer.toString(inscription.nbInvite)+")"%>
+          <% }%></li>
         <% }%>
         </ul>
       </div>

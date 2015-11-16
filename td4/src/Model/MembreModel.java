@@ -28,11 +28,11 @@ public class MembreModel extends Model
 		return membre;
 	}
 
-	public List<tp4.Entity.Membre> getInscrits(int idsort)
+	public List<tp4.Entity.Membre> findAll()
 	{
+		ResultSet rs = orm.select("SELECT * FROM membre");
 		List<tp4.Entity.Membre> membres = new ArrayList<tp4.Entity.Membre>();
-		ResultSet rs = orm.select("SELECT m.PSEUDO, m.PRENOM, m.NOM, m.DTENAISS FROM membre m JOIN inscription s ON s.pseudo = m.pseudo AND s.idsort = " + Integer.toString(idsort));
-		
+
 		try {
 			while(rs.next()) {
 				membres.add(fillEntity(rs));

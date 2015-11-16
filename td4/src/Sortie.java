@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.sql.*;
 import java.util.*;
@@ -18,16 +19,26 @@ public class Sortie extends HttpServlet
 	private static final long serialVersionUID = 1L;
 	Database database = new Database();
 	Orm orm = new Orm(database);
+	String currentPseudo;
 
 	public Sortie()
 	{
 		orm.registerModel("Sortie", new tp4.Model.SortieModel(orm));
 		orm.registerModel("Membre", new tp4.Model.MembreModel(orm));
 		orm.registerModel("Commentaire", new tp4.Model.CommentaireModel(orm));
+		orm.registerModel("Inscription", new tp4.Model.InscriptionModel(orm));
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		HttpSession session = request.getSession();
+        currentPseudo = (String)session.getAttribute("currentPseudo");
+
+        if (currentPseudo == null) {
+        	currentPseudo = "Elixir";
+        	session.setAttribute("currentPseudo", currentPseudo);
+        }
+
 		String option = request.getParameter("option");
 
 		if(option.equals("list")) {
@@ -80,7 +91,7 @@ public class Sortie extends HttpServlet
 	protected tp4.Entity.Membre getCurrentUser()
 	{
 		tp4.Model.MembreModel membreRepo = (tp4.Model.MembreModel)orm.getModel("Membre");
-		return membreRepo.find("Elixir");
+		return membreRepo.find(currentPseudo);
 	}
 
 	protected String getCurrentDatetime()

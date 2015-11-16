@@ -11,7 +11,7 @@ public class Sortie extends Entity
 
 	// Relation avec Membre
 	private Membre organisateur;
-	private List<Membre> inscrits;
+	private List<Inscription> inscriptions;
 	private List<Commentaire> commentaires;
 	public String organisateurPseudo;
 
@@ -40,14 +40,14 @@ public class Sortie extends Entity
 		return datetime.substring(10, 16);
 	}
 
-	public List<Membre> getParticipants()
+	public List<Inscription> getInscriptions()
 	{
-		if (inscrits == null) {
-			tp4.Model.MembreModel membresRepo = (tp4.Model.MembreModel)orm.getModel("Membre");
-			inscrits = membresRepo.getInscrits(id);
+		if (inscriptions == null) {
+			tp4.Model.InscriptionModel inscriptionsRepo = (tp4.Model.InscriptionModel)orm.getModel("Inscription");
+			inscriptions = inscriptionsRepo.getBySortie(id);
 		}
 
-		return inscrits;
+		return inscriptions;
 	}
 
 	public List<Commentaire> getCommentaires()

@@ -1,5 +1,6 @@
 package tp4.Model;
 import java.sql.*;
+import java.util.*;
 
 public class MembreModel extends Model
 {
@@ -17,13 +18,33 @@ public class MembreModel extends Model
 			while(rs.next()) {
 				membre = fillEntity(rs);
 			}
-			orm.close();
 		}
 		catch(SQLException se) {
-			   se.printStackTrace();
+			se.printStackTrace();
+		} finally {
+			orm.close();
 		}
 
 		return membre;
+	}
+
+	public List<tp4.Entity.Membre> getInscrits(int idsort)
+	{
+		List<tp4.Entity.Membre> membres = new ArrayList<tp4.Entity.Membre>();
+		ResultSet rs = orm.select("SELECT m.PSEUDO, m.PRENOM, m.NOM, m.DTENAISS FROM membre m JOIN inscription s ON s.pseudo = m.pseudo AND s.idsort = " + Integer.toString(idsort));
+		
+		try {
+			while(rs.next()) {
+				membres.add(fillEntity(rs));
+			}
+		}
+		catch(SQLException se) {
+			se.printStackTrace();
+		} finally {
+			orm.close();
+		}
+
+		return membres;
 	}
 
 	protected tp4.Entity.Membre fillEntity(ResultSet rs)
@@ -36,7 +57,7 @@ public class MembreModel extends Model
 			entity.prenom = rs.getString("PRENOM");
 		}
 		catch(SQLException se) {
-			   se.printStackTrace();
+			se.printStackTrace();
 		}
 
 		return entity;

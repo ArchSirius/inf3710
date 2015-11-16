@@ -3,6 +3,7 @@ package tp4.Lib;
 import java.io.IOException;
 
 import java.util.*;
+import java.util.function.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,11 @@ public class Orm
 	{	
 		dbh = db;
 		models = new HashMap<String,tp4.Model.Model>();
-		models.put("Sortie", new tp4.Model.SortieModel(this));
-		models.put("Membre", new tp4.Model.MembreModel(this));
+	}
+
+	public void registerModel(String e, tp4.Model.Model m)
+	{
+		models.put(e, m);
 	}
 
 	public tp4.Model.Model getModel(String name)
@@ -35,6 +39,18 @@ public class Orm
 		dbh.connect();
 		stmt = dbh.getStatement();
 		return dbh.executeSelect(stmt, sql);
+	}
+
+	public void execute(String sql)
+	{
+		if (stmt != null) {
+			close();
+		}
+
+		dbh.connect();
+		stmt = dbh.getStatement();
+		int resp = dbh.executeSql(stmt, sql);
+		close();
 	}
 
 	public void close()

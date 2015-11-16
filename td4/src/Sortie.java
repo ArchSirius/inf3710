@@ -21,7 +21,9 @@ public class Sortie extends HttpServlet
 
 	public Sortie()
 	{
-
+		orm.registerModel("Sortie", new tp4.Model.SortieModel(orm));
+		orm.registerModel("Membre", new tp4.Model.MembreModel(orm));
+		orm.registerModel("Commentaire", new tp4.Model.CommentaireModel(orm));
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -53,15 +55,37 @@ public class Sortie extends HttpServlet
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//String option = request.getParameter("option");
-		//if(option.equals("Insert")){
-		//	String message = insert(request);
-		//	request.setAttribute("message", message);
-		//	List<String[]> pays = selectPays();
-		//	request.setAttribute("pays", pays);
-		//	request.getRequestDispatcher("/new.jsp").forward(request, response);
-		//}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		String option = request.getParameter("option");
+
+		if(option.equals("addcomment")) {
+			tp4.Model.SortieModel sortiesRepo = (tp4.Model.SortieModel)orm.getModel("Sortie");
+			tp4.Model.CommentaireModel commentaireRepo = (tp4.Model.CommentaireModel)orm.getModel("Commentaire");
+
+			tp4.Entity.Sortie sortie = sortiesRepo.find((String)request.getParameter("idsort"));
+			tp4.Entity.Commentaire comment = new tp4.Entity.Commentaire(orm);
+			comment.setSortie(sortie);
+			comment.setAuteur(getCurrentUser());
+			comment.date = getCurrentDatetime();
+			comment.text = (String)request.getParameter("text");
+
+			commentaireRepo.save(comment);
+
+			request.setAttribute("sortie", sortie);
+			request.getRequestDispatcher("/details.jsp").forward(request, response);
+		}
+	}
+
+	protected tp4.Entity.Membre getCurrentUser()
+	{
+		tp4.Model.MembreModel membreRepo = (tp4.Model.MembreModel)orm.getModel("Membre");
+		return membreRepo.find("Elixir");
+	}
+
+	protected String getCurrentDatetime()
+	{
+		return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
 	}
 
 	//protected String insert(HttpServletRequest request) {

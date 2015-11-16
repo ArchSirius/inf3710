@@ -20,10 +20,11 @@ public class SortieModel extends Model
 			while(rs.next()) {
 				sortie = fillEntity(rs);
 			}
-			orm.close();
 		}
 		catch(SQLException se) {
-			   se.printStackTrace();
+			se.printStackTrace();
+		} finally {
+			orm.close();
 		}
 
 		return sortie;
@@ -31,7 +32,6 @@ public class SortieModel extends Model
 
 	public Map<String,List<Sortie>> list()
 	{
-
 		Map<String,List<Sortie>> sorties = new HashMap<String,List<Sortie>>();
 
 		for (String date : getFutureDates()) {
@@ -43,10 +43,11 @@ public class SortieModel extends Model
 				while(rs.next()) {
 					sorties.get(date).add(fillEntity(rs));
 				}
-				orm.close();
 			}
 			catch(SQLException se) {
-				   se.printStackTrace();
+				se.printStackTrace();
+			} finally {
+				orm.close();
 			}
 		}
 
@@ -62,11 +63,14 @@ public class SortieModel extends Model
 			while(rs.next()) {
 				dates.add(rs.getString("M_DAY"));
 			}
-			orm.close();
 		}
 		catch(SQLException se) {
-			   se.printStackTrace();
+			se.printStackTrace();
+		} finally {
+			orm.close();
 		}
+
+
 		return dates;
 	}
 
@@ -79,9 +83,12 @@ public class SortieModel extends Model
 			entity.title = rs.getString("NOM");
 			entity.datetime = rs.getString("DTE");
 			entity.organisateurPseudo = rs.getString("RESPONSABLE");
+			entity.description = rs.getString("DESCRIPTION");
+			entity.adresse = rs.getString("ADRESSE");
+			entity.nbMax = Integer.parseInt(rs.getString("MAXPERS"));
 		}
 		catch(SQLException se) {
-			   se.printStackTrace();
+			 se.printStackTrace();
 		}
 
 		return entity;

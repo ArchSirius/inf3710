@@ -63,7 +63,7 @@ public class Database {
 			rs = stmt.executeQuery(sql);
 		}
 		catch(SQLException se) {
-			   se.printStackTrace();
+			se.printStackTrace();
 		}
 		return rs;
 	}
@@ -74,7 +74,7 @@ public class Database {
 			resp = stmt.executeUpdate(sql);
 		}
 		catch(SQLException se) {
-			   se.printStackTrace();
+			se.printStackTrace();
 		}
 		return resp;
 	}

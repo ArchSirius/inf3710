@@ -1,0 +1,186 @@
+\documentclass[11pt,letterpaper]{article}
+
+%Langue et caractères spéciaux
+\usepackage[french]{babel} 
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{caption}
+\captionsetup[table]{name=\textsc{Tableau}}
+%Marges
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm, columnsep=20pt]{geometry}
+\usepackage{scrextend}
+\setlength\parindent{0pt}
+%Math
+\usepackage{amsmath}
+%Graphiques
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	urlcolor=black,
+	linkcolor=black,
+	citecolor=black}
+\usepackage{listings}
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstdefinestyle{sql}{
+  language=SQL,
+  frame=single,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\footnotesize\ttfamily},
+  numberstyle={\tiny},
+  numbers=left,
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  otherkeywords={=, REPLACE, AFTER, BEGIN, if, DECLARE}
+}
+\renewcommand{\lstlistingname}{Déclencheur}
+\renewcommand{\thesubsection}{\thesection.\Alph{subsection})}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%
+% Page titre %
+%%%%%%%%%%%%%%
+\begin{titlepage}
+\begin{center}
+
+\includegraphics[width=0.25\textwidth]{./logo.png}~\\[1cm]
+
+\textsc{\huge École Polytechnique de Montréal}\\[1.5cm]
+
+\rule{0.5\linewidth}{0.5mm} \\[0.4cm]
+{\LARGE TP4 - Automne 2015}\\[0.4cm]
+{\Large JDBC++, déclencheurs (triggers)}\\[1.0cm]
+
+{\large INF3710}\\[0.4cm]
+{\large \textbf{Bases de données}}\\[0.4cm]
+
+\rule{0.5\linewidth}{0.5mm} \\[1.0cm]
+
+{\large par}\\[0.6cm]
+\begin{Large}
+  \begin{tabular}{r l}
+    Louis \textsc{Racicot} & 1679747\\[0.4cm]
+    Samuel \textsc{Rondeau} & 1723869\\[0.4cm]
+  \end{tabular}
+\end{Large}
+
+
+\vfill
+
+{\large Remis le}\\[0.3cm]
+{\Large \today}\\[1.5cm]
+{\large Richard Jaramillo, Département de génie informatique et génie logiciel}\\[0.3cm]
+{\large École Polytechnique de Montréal}
+
+\end{center}
+\end{titlepage}
+
+
+
+\newpage
+\section{Modifications de la base de données}
+\hrule
+\vspace{1em}
+Afin de répondre aux nouvelles demandes et de produire une base de données représentative de la situation, 
+voici les modifications effectuées par rapport à la base de données du travail pratique précédent.\\
+\renewcommand{\labelitemi}{$\bullet$}
+\begin{itemize}
+  \item On crée le champ \textbf{nbInvite}, le nombre d’invités, à la table \textbf{Inscription};
+  \item On ajoute une vérification (\textit{CHECK}) sur ce nombre;
+  \item On crée la table \textbf{Attente}, où chaque entrée est une inscription non confirmée en attente;
+  \item On ajoute à la table \textbf{Sortie} les champs \textbf{description}, \textbf{adresse} et \textbf{nbMax};
+  \item On crée la table \textbf{Commentaire} avec les champs \textbf{idComment}, \textbf{pseudo}, \textbf{idSort}, \textbf{text} et \textbf{dte}.
+\end{itemize}
+
+
+\hfill
+\section{Contraintes d´intégrité}
+\hrule
+\vspace{1em}
+
+\subsection{Inscription de l’organisateur d’une sortie}
+\begin{lstlisting}[style=sql, label={lst:p3}]
+CREATE OR REPLACE TRIGGER inscrire_organisateur
+AFTER INSERT ON Sortie
+FOR EACH ROW
+
+BEGIN
+	INSERT INTO Inscription
+	(pseudo, idSort, statut)
+	VALUES
+	(:NEW.responsable, :NEW.idSort, 0);
+END;
+\end{lstlisting}
+
+
+\subsection{Inscription à deux sorties simultanées}
+\begin{lstlisting}[style=sql, label={lst:p4}]
+CREATE OR REPLACE TRIGGER sorties_simultanees
+BEFORE INSERT ON Inscription
+FOR EACH ROW
+
+DECLARE
+  newDate DATE;
+  nb INTEGER;
+
+BEGIN
+  SELECT dte INTO newDate
+  FROM Sortie
+  WHERE idSort = :NEW.idSort;
+  
+  SELECT COUNT(*) INTO nb
+  FROM SORTIE S
+  WHERE
+    extract(HOUR FROM (S.dte - newDate)) < 4 AND
+    extract(HOUR FROM (S.dte - newDate)) > -4 AND
+    extract(DAY FROM (S.dte - newDate)) = 0
+  ;
+
+	if nb > 1 then
+	RAISE_APPLICATION_ERROR(-20000, 'Sorties concurrentes');
+	end if;
+END;
+\end{lstlisting}
+
+
+\subsection{Propriétés 3 et 4}
+\subsubsection*{Nombre d’invités}
+Avant chaque insertion dans la table Inscription, si le nombre d’invités (excluant le membre) à l’inscription est supérieur à 7, on rejette l’insertion.
+
+\subsubsection*{Inscription après la date}
+Avant chaque insertion dans la table Inscription, on récupère l’ID de la sortie, on sélectionne la sortie avec l’ID correspondant dans la table Sortie, et on compare la date de l’événement avec la date actuelle. Si la date de la sortie est antérieure à la date actuelle, on rejette l’insertion.
+
+
+\subsection{Autres propriétés}
+D'autres propriétés pourraient nécessiter des déclencheurs pour assurer leur intégrité, telles que\\
+\begin{itemize}
+  \item XXX
+  \item XXX
+\end{itemize}
+
+
+
+\section{Implantation des méthodes en utilisant JDBC}
+\hrule
+\vspace{1em}
+\stepcounter{subsection}
+\subsection{Captures d'écran}
+XXX
+
+\end{document}

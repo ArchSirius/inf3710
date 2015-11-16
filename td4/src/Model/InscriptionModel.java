@@ -47,7 +47,6 @@ public class InscriptionModel extends Model
 
 	public void save(tp4.Entity.Inscription entity)
 	{
-		System.out.println("INSERT INTO inscription (PSEUDO, IDSORT, STATUT, NBINVITE) VALUES ('"+entity.pseudo+"', "+Integer.toString(entity.idsort)+", "+entity.statut+", "+Integer.toString(entity.nbInvite)+")");
 		orm.execute("INSERT INTO inscription (PSEUDO, IDSORT, STATUT, NBINVITE) VALUES ('"+entity.pseudo+"', "+Integer.toString(entity.idsort)+", "+entity.statut+", "+Integer.toString(entity.nbInvite)+")");
 	}
 }

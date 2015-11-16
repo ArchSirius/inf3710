@@ -59,4 +59,12 @@ public class Sortie extends Entity
 
 		return commentaires;
 	}
+
+	public void setOrganisateur(Membre o)
+	{
+		organisateur = o;
+		organisateurPseudo = o.pseudo;
+	}
+
+
 }

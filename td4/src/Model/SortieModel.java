@@ -93,4 +93,33 @@ public class SortieModel extends Model
 
 		return entity;
 	}
+
+	public void save(tp4.Entity.Sortie entity)
+	{
+		System.out.println("SQL");
+		Integer id = entity.id;
+		if (id == 0)
+			orm.execute("INSERT INTO sortie (idsort, nom, dte, responsable, description, adresse, maxpers, genre) VALUES ('"+getNextId()+"', '"+entity.title+"', TO_DATE('"+entity.datetime+"', 'YYYY-MM-DD HH24:MI:SS'), '"+entity.organisateurPseudo+"', '"+entity.description+"', '"+entity.adresse+"', '"+entity.nbMax+"', 'auto')");
+		else
+			orm.execute("UPDATE sortie SET idsort = "+Integer.toString(entity.id)+", nom = "+entity.title+", dte = TO_DATE('"+entity.datetime+"', 'YYYY-MM-DD HH24:MI:SS'), responsable = "+entity.organisateurPseudo+", description = "+entity.description+", adresse = "+entity.adresse+", maxpers = "+entity.nbMax+", WHERE idsort = "+entity.id);
+	}
+
+	protected int getNextId()
+	{
+		int id = 0;
+		ResultSet rs = orm.select("SELECT MAX(idsort) as id FROM sortie");
+		
+		try {
+			while(rs.next()) {
+				id = rs.getInt("id");
+			}
+		}
+		catch(SQLException se) {
+			se.printStackTrace();
+		} finally {
+			orm.close();
+		}
+
+		return id + 1;
+	}
 }

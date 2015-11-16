@@ -124,6 +124,19 @@ public class Sortie extends HttpServlet
 			request.setAttribute("sortie", sortie);
 			request.getRequestDispatcher("/details.jsp").forward(request, response);
 		}
+		else if (option.equals("save")) {
+			tp4.Model.SortieModel sortiesRepo = (tp4.Model.SortieModel)orm.getModel("Sortie");
+			
+			tp4.Entity.Sortie sortie = sortiesRepo.find((String)request.getParameter("id"));
+			sortie.title = request.getParameter("title");
+			sortie.datetime = request.getParameter("datetime");
+			sortie.setOrganisateur(getCurrentUser());
+			sortie.description = request.getParameter("description");
+			sortie.adresse = request.getParameter("adresse");
+			sortie.nbMax = Integer.parseInt(request.getParameter("nbmax"));
+			
+			sortiesRepo.save(sortie);
+		}
 	}
 
 	protected tp4.Entity.Membre getCurrentUser()

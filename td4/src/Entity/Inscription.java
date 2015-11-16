@@ -12,10 +12,10 @@ public class Inscription extends Entity
 	public String pseudo;
 	private Membre membre;
 
-	public String statut;
+	public String statut = "0";
 
 	// Champs à ajouter
-	public int nbInvite = 0; // ALTER TABLE INSCRIPTION ADD NBINVITE NUMBER CHECK (NBINVITE BETWEEN 0 AND 7); ALTER TABLE INSCRIPTION MODIFY NBINVITE NOT NULL NOVALIDATE;
+	public int nbInvite = 0; // ALTER TABLE INSCRIPTION ADD NBINVITE NUMBER CHECK (NBINVITE BETWEEN 0 AND 8); ALTER TABLE INSCRIPTION MODIFY NBINVITE NOT NULL NOVALIDATE;
 
 
 	public Inscription(tp4.Lib.Orm orm_)

@@ -11,7 +11,7 @@
       </div>
       <div class="form-group">
         <label>Nombre maximal de participants</label>
-        <input type="number" min="0" max="8" class="form-control">
+        <input type="number" min="0" class="form-control">
       </div>
       <div class="form-group">
         <label>Date et heure</label>

@@ -18,7 +18,7 @@ public class Sortie extends Entity
 	// Nouveaux champs
 	public String description; 	// ALTER TABLE SORTIE ADD DESCRIPTION VARCHAR(1000);
 	public String adresse; 		// ALTER TABLE SORTIE ADD ADRESSE VARCHAR(255);
-	public int nbMax; 			// ALTER TABLE SORTIE ADD MAXPERS NUMBER CHECK (MAXPERS BETWEEN 0 AND 8);
+	public int nbMax; 			// ALTER TABLE SORTIE ADD MAXPERS NUMBER;
 
 	public Sortie(tp4.Lib.Orm orm_)
 	{

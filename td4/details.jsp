@@ -30,13 +30,13 @@
         <form action="sortie?option=inscription" method="POST">
           <div class="form-group">
             <label>Nombre d'invit&eacute;s</label>
-            <input type="number" class="form-control" name="nbInvite" value="0" max="7" min="0" />
+            <input type="number" class="form-control" name="nbInvite" value="0" max="8" min="0" />
           </div>
           <input type="hidden" name="idsort" value="<%= Integer.toString(sortie.id)%>" />
           <button type="submit" class="btn btn-primary">Continuer &raquo;</button>
         </form>
         <hr />
-        <h3><%= sortie.getInscriptions().size()%> Personnes inscrites</h3>
+        <h3><%= sortie.getInscriptions().size()%> membres inscrits</h3>
         <ul>
         <% for (tp4.Entity.Inscription inscription : sortie.getInscriptions()) {%>
           <li><%= inscription.getMembre().prenom%> <%= inscription.getMembre().nom%> <% if (inscription.nbInvite > 0) {%>

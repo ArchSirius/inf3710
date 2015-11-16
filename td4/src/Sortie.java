@@ -41,7 +41,7 @@ public class Sortie extends HttpServlet
 
 		String option = request.getParameter("option");
 
-		if(option.equals("list")) {
+		if (option.equals("list")) {
 
 			tp4.Model.SortieModel sortiesRepo = (tp4.Model.SortieModel)orm.getModel("Sortie");
 			Map<String,List<tp4.Entity.Sortie>> sorties = sortiesRepo.list();
@@ -68,9 +68,17 @@ public class Sortie extends HttpServlet
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		HttpSession session = request.getSession();
+        currentPseudo = (String)session.getAttribute("currentPseudo");
+
+        if (currentPseudo == null) {
+        	currentPseudo = "Elixir";
+        	session.setAttribute("currentPseudo", currentPseudo);
+        }
+        
 		String option = request.getParameter("option");
 
-		if(option.equals("addcomment")) {
+		if (option.equals("addcomment")) {
 			tp4.Model.SortieModel sortiesRepo = (tp4.Model.SortieModel)orm.getModel("Sortie");
 			tp4.Model.CommentaireModel commentaireRepo = (tp4.Model.CommentaireModel)orm.getModel("Commentaire");
 
@@ -82,6 +90,23 @@ public class Sortie extends HttpServlet
 			comment.text = (String)request.getParameter("text");
 
 			commentaireRepo.save(comment);
+
+			request.setAttribute("sortie", sortie);
+			request.getRequestDispatcher("/details.jsp").forward(request, response);
+		}
+		else if (option.equals("inscription")) {
+			tp4.Model.SortieModel sortiesRepo = (tp4.Model.SortieModel)orm.getModel("Sortie");
+			tp4.Model.InscriptionModel inscriptionRepo = (tp4.Model.InscriptionModel)orm.getModel("Inscription");
+
+			tp4.Entity.Sortie sortie = sortiesRepo.find((String)request.getParameter("idsort"));
+			tp4.Entity.Inscription inscription = new tp4.Entity.Inscription(orm);
+			inscription.setSortie(sortie);
+			inscription.setMembre(getCurrentUser());
+			inscription.nbInvite = Integer.parseInt((String)request.getParameter("nbInvite"));
+
+			inscriptionRepo.save(inscription);
+			System.out.println((String)request.getParameter("nbInvite"));
+			System.out.println(inscription.nbInvite);
 
 			request.setAttribute("sortie", sortie);
 			request.getRequestDispatcher("/details.jsp").forward(request, response);

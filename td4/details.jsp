@@ -3,8 +3,7 @@
 <%  tp4.Entity.Sortie sortie = (tp4.Entity.Sortie)request.getAttribute("sortie");%>
 <div class="row">
   <div class="col-md-6">
-    <button type="button" class="btn btn-default">Modifier cette sortie</button>
-    <div class="page-header">
+    <a href="sortie?option=edit&id=<%= sortie.id%>"><button type="button" class="btn btn-default">Modifier cette sortie</button></a>    <div class="page-header">
       <h1>Sortie #<%= Integer.toString(sortie.id)%>: <%= sortie.title%><br><small>Organis&eacute; par <%= sortie.getOrganisateur().prenom%> <%= sortie.getOrganisateur().nom%></small></h1>
     </div>
   </div>

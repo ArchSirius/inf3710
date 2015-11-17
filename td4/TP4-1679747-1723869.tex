@@ -170,8 +170,9 @@ Avant chaque insertion dans la table Inscription, on récupère l’ID de la sor
 \subsection{Autres propriétés}
 D'autres propriétés pourraient nécessiter des déclencheurs pour assurer leur intégrité, telles que\\
 \begin{itemize}
-  \item XXX
-  \item XXX
+  \item Limiter le nombre d'invités par membre, par exemple, limiter à 2 invités (en plus du membre) pour une sortie à places limitées. Ainsi, les places disponibles pour une sortie ne pourront être monopolisées par un membre et ses amis.
+  \item Empêcher de modifier une sortie ayant déjà eu lieu ou une inscription à une telle sortie. Dans le même ordre d'idée, empêcher le devancement d'une sortie à une date antérieure à la date d'aujourd'hui.
+  \item Empêcher le changement d'heure d'une sortie dans les 24 heures avant qu'elle ait normalement lieu, ou son devancement de sorte qu'elle ait lieu subitement dans les 24 prochaines heures. Par exemple, si nous somme le 1$^{er}$ mars à 18h, la sortie $A$ prévue pour le 2 mars à 12h ne pourrait être devancée ou retardée. La sortie $B$ prévue le 3 mars à 12h ne pourrait être devancé avant le 2 mars à 12h.
 \end{itemize}
 
 
@@ -181,6 +182,34 @@ D'autres propriétés pourraient nécessiter des déclencheurs pour assurer leur
 \vspace{1em}
 \stepcounter{subsection}
 \subsection{Captures d'écran}
-XXX
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{snapshot1.png}
+  \caption{Page d'accueil et menu principal.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{snapshot2.png}
+  \caption{Création d'une nouvelle sortie et mise à jour.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{snapshot3.png}
+  \caption{Liste des sorties à venir.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{snapshot5.png}
+  \caption{Vue détaillée d'une sortie.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.5]{snapshot4.png}
+  \caption{Changement d'utilisateur.}
+\end{figure}
 
 \end{document}
